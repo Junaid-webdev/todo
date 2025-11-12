@@ -1,6 +1,6 @@
 @extends('layouts.default')
 @section('content')
-
+    
 <div class="col-md-10 mx-auto mt-4 col-lg-5">
     <form method="POST" action="{{route('login.post')}}" class="p-4 p-md-5 border rounded-3 bg-light">
         @csrf

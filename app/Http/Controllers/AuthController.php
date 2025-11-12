@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use GuzzleHttp\Psr7\Request as Psr7Request;
-use Illuminate\Http\Client\Request as ClientRequest;
+use App\Models\todos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
-
 
 class AuthController extends Controller
 {
@@ -52,4 +50,38 @@ class AuthController extends Controller
         Auth::logout();
          return redirect()->route('login');
     }
+
+
+
+
+
+
+    public function index(){
+        $todos = todos::all();
+        $data = compact('todos');
+        return view('todo')->with($data);
+    }
+    public function store(Request $request){
+       $request->validate([
+        'name' => 'required',
+        'work' => 'required',
+        'duedate' => 'required'
+       ]);
+       $todo = new todos;
+       $todo->name=$request['name'];
+       $todo->work=$request['work'];
+       $todo->duedate=$request['duedate'];
+       $todo->save();
+            return redirect()->intended(route('todo'));
+    }
+    public function delete($id){
+        todos::find($id)->delete();
+            return redirect()->intended(route('todo'));
+    }
+    public function edit($id){
+        $todo = todos::find($id);
+        $data=compact('todo');
+        return view('update')->with($data);
+    }
 }
+   

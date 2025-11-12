@@ -12,3 +12,19 @@ Route::get('/register',[AuthController::class,'register'])->name('register');
 Route::post('/register',[AuthController::class,'registerPost'])->name('register.post');
 Route::get('/logout',[AuthController::class,'logout'])->name('logout');
 
+
+
+
+
+
+Route::get('/todo',[AuthController::class,'index'])->name('todo');
+Route::get('/create',function(){
+    return view('create');
+})->name('create');
+Route::get('/edit/{id}',[AuthController::class,'edit'])->name('edit');
+Route::post('/create',[AuthController::class,'store'])->name('todo.store');
+Route::get('/delete/{id}',[AuthController::class,'delete'])->name('todo.delete');
+
+
+
+    
