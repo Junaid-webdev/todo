@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\User;
 use App\Models\todos;
 use Illuminate\Http\Request;
@@ -11,24 +10,49 @@ use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
-    function login(){
+    // Show Login Form //
+
+     public function login()
+    {
+        if(Auth::check()){
+            return redirect(route('home'));
+        }
         return view('auth.login');
     }
-    function loginPost(Request $request){
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required|min:8',
-        ]);
-        $credentials = $request->only('email','password');
-        if(Auth::attempt($credentials)){
-            return redirect()->intended(route('home'));
-        }
-        return redirect(route('login'))->with('error','Invalid Email Or Password');
-    }
 
-    function register(){
+
+
+    // Register Form //
+    public function register()
+    {
+        if(Auth::check()){
+            return redirect(route('home'));
+        
+
+        }
         return view('auth.register');
     }
+
+    
+     public function loginPost(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+            // regenerate session to prevent fixation
+            $request->session()->regenerate();
+            return redirect()->intended(route('home'));
+        }
+
+        return redirect()->route('auth.login')->with('error', 'Login details are not valid');
+    }
+
+
+
     function registerPost(Request $request){
         $request->validate([
             'name' => 'required',
@@ -38,9 +62,9 @@ class AuthController extends Controller
         $User = new User();
         $User->name = $request->name; 
         $User->email = $request->email; 
-        $User->password = $request->password;
+        $User->password = Hash::make($request->password);
         if($User->save()){
-            return redirect(route('login'))->with('Success','Registration Successfully!');
+            return redirect(route('auth.login'))->with('Success','Registration Successfully!');
         }
         return redirect(route('register'))->with('error','Registration Failed');
     }
@@ -48,7 +72,7 @@ class AuthController extends Controller
     function logout(Request $request){
         Session::flush();
         Auth::logout();
-         return redirect()->route('login');
+         return redirect()->route('auth.login');
     }
 
 
@@ -83,5 +107,18 @@ class AuthController extends Controller
         $data=compact('todo');
         return view('update')->with($data);
     }
+    public function update(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'work' => 'required',
+            'duedate' => 'required'
+        ]);
+        $id=$request['id'];
+   $todo = todos::find($id);
+       $todo->name=$request['name'];
+       $todo->work=$request['work'];
+       $todo->duedate=$request['duedate'];
+       $todo->save();
+            return redirect()->intended(route('todo'));    }
 }
    

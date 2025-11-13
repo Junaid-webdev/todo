@@ -79,7 +79,7 @@
     <!-- ✅ Bootstrap Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">DoItNow 🚀</a>
+        <a class="navbar-brand" href="#">To Do 🚀</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -89,24 +89,18 @@
           <ul class="navbar-nav">
             @auth
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="{{route('home')}}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{route('todo')}}">All Task</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{route('create')}}">New Task</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{route('edit')}}">Update Todo</a>
+              <a class="nav-link" href="{{route('todo')}}">List</a>
             </li>
             @endauth
             @guest
             <li class="nav-item">
-              <a class="nav-link" href="{{url('login')}}">Login</a>
+              <a class="nav-link" href="{{url('auth.login')}}">Login</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{url('register')}}">Register</a>
+              <a class="nav-link" href="{{url('auth.register')}}">Register</a>
             </li>
             @endguest
           </ul>
